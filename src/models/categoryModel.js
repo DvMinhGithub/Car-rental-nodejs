@@ -71,13 +71,32 @@ const categoryModel = {
   updateCategory: (id, data) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'UPDATE category SET ? WHERE id = ?',
-        [data, id],
+        'SELECT * FROM category WHERE id = ?',
+        [id],
         (error, results) => {
           if (error) {
-            reject(new Error('Failed to update category'));
+            reject(new Error('Error checking category existence'));
+          } else if (results.length === 0) {
+            reject(new Error('Category not found'));
           } else {
-            resolve(results);
+            connection.query(
+              'UPDATE category SET ? WHERE id = ?',
+              [data, id],
+              (updateError, updateResults) => {
+                if (updateError) {
+                  switch (updateError.code) {
+                    case 'ER_DUP_ENTRY':
+                      reject(new Error('Category name already exists'));
+                      break;
+                    default:
+                      reject(new Error(updateError.message));
+                      break;
+                  }
+                } else {
+                  resolve(updateResults);
+                }
+              }
+            );
           }
         }
       );

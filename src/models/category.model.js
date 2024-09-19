@@ -30,7 +30,7 @@ const categoryModel = {
         data: categories,
       };
     } catch (error) {
-      console.error('Error in getCategories:', error);
+      console.error('Error fetching categories:', error);
       throw new Error('Failed to fetch categories');
     }
   },
@@ -45,21 +45,21 @@ const categoryModel = {
       }
       return category;
     } catch (error) {
-      console.error('Error in getCategoryById:', error);
-      throw error;
+      console.error('Error fetching category by ID:', error);
+      throw new Error('Failed to fetch category');
     }
   },
 
   async postCategory(data) {
     try {
-      const result = await query('INSERT INTO category SET ?', data);
+      const result = await query('INSERT INTO category SET ?', [data]);
       return result;
     } catch (error) {
-      console.error('Error in postCategory:', error);
+      console.error('Error adding category:', error);
       if (error.code === 'ER_DUP_ENTRY') {
         throw new Error('Category name already exists');
       }
-      throw error;
+      throw new Error('Failed to add category');
     }
   },
 
@@ -80,11 +80,11 @@ const categoryModel = {
       ]);
       return result;
     } catch (error) {
-      console.error('Error in updateCategory:', error);
+      console.error('Error updating category:', error);
       if (error.code === 'ER_DUP_ENTRY') {
         throw new Error('Category name already exists');
       }
-      throw error;
+      throw new Error('Failed to update category');
     }
   },
 
@@ -102,8 +102,8 @@ const categoryModel = {
       const result = await query('DELETE FROM category WHERE id = ?', [id]);
       return result;
     } catch (error) {
-      console.error('Error in deleteCategory:', error);
-      throw error;
+      console.error('Error deleting category:', error);
+      throw new Error('Failed to delete category');
     }
   },
 };

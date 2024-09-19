@@ -1,19 +1,38 @@
 const categoryModel = require('#models/category.model');
 
+const sendSuccessResponse = (
+  res,
+  data,
+  statusCode = 200,
+  message = 'Success'
+) => {
+  res.status(statusCode).json({
+    code: statusCode,
+    message,
+    result: data,
+  });
+};
+
+const sendErrorResponse = (res, error, statusCode = 500, message = 'Error') => {
+  res.status(statusCode).json({
+    code: statusCode,
+    message,
+    error: error.message,
+  });
+};
+
 const categoryController = {
   getAllCategories: async (req, res) => {
     try {
-      const { name, limit, page } = req.query;
+      const { name, limit = 10, page = 1 } = req.query;
       const result = await categoryModel.getCategories({
         name,
-        limit: parseInt(limit) || 10,
-        page: parseInt(page) || 1,
+        limit: parseInt(limit),
+        page: parseInt(page),
       });
-      res.status(200).json(result);
+      sendSuccessResponse(res, result);
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: 'Error fetching categories', error: error.message });
+      sendErrorResponse(res, error, 500, 'Error fetching categories');
     }
   },
 
@@ -21,22 +40,18 @@ const categoryController = {
     try {
       const { id } = req.params;
       const result = await categoryModel.getCategoryById(id);
-      res.status(200).json(result);
+      sendSuccessResponse(res, result);
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: 'Error fetching category', error: error.message });
+      sendErrorResponse(res, error, 500, 'Error fetching category');
     }
   },
 
   addCategory: async (req, res) => {
     try {
       const result = await categoryModel.postCategory(req.body);
-      res.status(201).json(result);
+      sendSuccessResponse(res, result, 201, 'Category added successfully');
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: 'Error adding category', error: error.message });
+      sendErrorResponse(res, error, 500, 'Error adding category');
     }
   },
 
@@ -44,11 +59,9 @@ const categoryController = {
     try {
       const { id } = req.params;
       const result = await categoryModel.updateCategory(id, req.body);
-      res.status(200).json(result);
+      sendSuccessResponse(res, result);
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: 'Error updating category', error: error.message });
+      sendErrorResponse(res, error, 500, 'Error updating category');
     }
   },
 
@@ -56,11 +69,9 @@ const categoryController = {
     try {
       const { id } = req.params;
       const result = await categoryModel.deleteCategory(id);
-      res.status(200).json(result);
+      sendSuccessResponse(res, result);
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: 'Error deleting category', error: error.message });
+      sendErrorResponse(res, error, 500, 'Error deleting category');
     }
   },
 };

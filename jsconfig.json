@@ -4,7 +4,7 @@
     "paths": {
       "#controllers/*": ["./controllers/*.js"],
       "#models/*": ["./models/*.js"],
-      "#/src*": ["./*.js"]
+      "#/src/*": ["./*.js"]
     }
   }
 }

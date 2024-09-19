@@ -17,6 +17,17 @@ const categoryController = {
     }
   },
 
+  addCategory: async (req, res) => {
+    try {
+      const result = await categoryModel.postCategory(req.body);
+      res.status(201).json(result);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: 'Error adding category', error: error.message });
+    }
+  },
+
   deleteCategory: async (req, res) => {
     try {
       const { id } = req.params;

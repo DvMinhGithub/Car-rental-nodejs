@@ -40,6 +40,17 @@ const categoryModel = {
     });
   },
 
+  postCategory: (data) => {
+    return new Promise((resolve, reject) => {
+      connection.query('INSERT INTO category SET ?', data, (error, results) => {
+        if (error) {
+          reject(new Error(error));
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
 
   deleteCategory: (id) => {
     return new Promise((resolve, reject) => {

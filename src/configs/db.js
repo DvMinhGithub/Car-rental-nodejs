@@ -7,8 +7,6 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-console.log(connection);
-
 connection.connect((err) => {
   if (err) {
     console.error('Error connecting: ' + err.stack);

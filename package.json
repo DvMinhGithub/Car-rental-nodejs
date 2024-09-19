@@ -28,6 +28,8 @@
     "prettier": "^3.3.3"
   },
   "imports": {
-    "@src/*": "./src/*.js"
+    "#controllers/*": "./src/controllers/*.js",
+    "#models/*": "./src/models/*.js",
+    "#src/*": "./src/*.js"
   }
 }

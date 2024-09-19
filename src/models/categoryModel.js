@@ -40,6 +40,22 @@ const categoryModel = {
     });
   },
 
+  getCategoryById: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM category WHERE id = ?',
+        [id],
+        (error, results) => {
+          if (error) {
+            reject(new Error('Failed to fetch category'));
+          } else {
+            resolve(results[0]);
+          }
+        }
+      );
+    });
+  },
+
   postCategory: (data) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO category SET ?', data, (error, results) => {
@@ -49,6 +65,22 @@ const categoryModel = {
           resolve(results);
         }
       });
+    });
+  },
+
+  updateCategory: (id, data) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'UPDATE category SET ? WHERE id = ?',
+        [data, id],
+        (error, results) => {
+          if (error) {
+            reject(new Error('Failed to update category'));
+          } else {
+            resolve(results);
+          }
+        }
+      );
     });
   },
 

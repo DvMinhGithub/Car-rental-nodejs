@@ -17,6 +17,18 @@ const categoryController = {
     }
   },
 
+  getCategoryById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const result = await categoryModel.getCategoryById(id);
+      res.status(200).json(result);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: 'Error fetching category', error: error.message });
+    }
+  },
+
   addCategory: async (req, res) => {
     try {
       const result = await categoryModel.postCategory(req.body);
@@ -25,6 +37,18 @@ const categoryController = {
       res
         .status(500)
         .json({ message: 'Error adding category', error: error.message });
+    }
+  },
+
+  updateCategory: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const result = await categoryModel.updateCategory(id, req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: 'Error updating category', error: error.message });
     }
   },
 
